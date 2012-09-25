@@ -1,0 +1,17 @@
+// Work in progress. This code was extracted from other places
+
+%td
+  = link_to [@user, @print_queue, job], :method => :delete, :class => "btn pull-right btn-destroy-print-job-js", :remote => true, :confirm => "Are you sure you want to delete #{job.name}?" do
+    %i.icon-remove
+    Delete
+  .btn-group.pull-right
+    %a.btn.dropdown-toggle{:"data-toggle"=>"dropdown"}
+      Download
+      %span.caret
+    %ul.dropdown-menu
+      %li
+        %a{:href=>""} Original Format (.scad)
+      %li
+        %a{:href=>""} STL
+      %li
+        %a{:href=>""} GCode

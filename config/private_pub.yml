@@ -1,0 +1,16 @@
+production: &production
+  server: "http://localhost:9292/faye"
+  secret_token: <%= ENV[PRIVATE_PUB_SECRET_TOKEN] %>
+  signature_expiration: 3600 # one hour
+
+staging:
+  <<: *production
+  server: "http://<%= ENV[PRIVATE_PUB_URL] %>:9292/faye"
+
+development:
+  <<: *production
+  server: "http://localhost:9292/faye"
+
+test:
+  <<: *production
+  server: "http://localhost:9292/faye"

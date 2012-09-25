@@ -1,0 +1,25 @@
+.modal-header
+  %button{:type=>"button", :class=>"close", :"data-dismiss"=>"modal"} ×
+  %h3= print_job.name
+
+.modal-body
+  .clear
+  .model-preview
+    CAD Model Goes Here
+    .btn-group.pull-right.btn-group-downloads
+      %a.btn.dropdown-toggle{:"data-toggle"=>"dropdown"}
+        Download
+        %span.caret
+      %ul.dropdown-menu
+        %li
+          %a{:href=>""} Original Format (.scad)
+        %li
+          %a{:href=>""} STL
+        %li
+          %a{:href=>""} GCode
+
+.modal-footer
+  .btn.btn-danger.pull-left
+    %i.icon-remove
+    Delete
+  .btn.btn-primary{:"data-dismiss"=>"modal"} Close

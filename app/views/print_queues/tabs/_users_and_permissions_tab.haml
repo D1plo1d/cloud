@@ -1,0 +1,20 @@
+- if false
+  %h3 Public Access
+
+  %p
+    Allows anyone on the local area network to send models to the print queue
+
+%h3 Members
+
+%table.table.table-striped.user_roles
+  %tbody
+    - @print_queue.roles.each do |role|
+      - role.users.map{|u| {:user => u, :role => role}}.each do |locals|
+        = render :partial => "users/role", :locals => locals
+
+- if can?(:manage_users, @print_queue)
+  .form-actions.add-members-form
+    = form_for :role, :url => add_role_user_print_queue_path(@user, @print_queue), :remote => true do |f|
+      = f.submit "Add", :class => "btn btn-primary pull-right"
+      = f.autocomplete_field :user, "/autocomplete/user"
+

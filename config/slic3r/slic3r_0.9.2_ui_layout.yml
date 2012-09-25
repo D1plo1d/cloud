@@ -1,0 +1,181 @@
+"Print Settings":
+  "Layers and perimeters":
+    "Layer height":
+      layer_height: {type: double, title: "Layer height", units: "mm" }
+      first_layer_height: {type: string, title: "First layer height", units: "mm or %" }
+    "Vertical shells":
+      perimeters: {type: int, title: "Perimeters (minimum)"}
+      randomize_start: {type: bool, title: "Randomize starting points"}
+      extra_perimeters: {type: bool, title: "Generate extra perimeters when needed"}
+    "Horizontal shells":
+      solid_layers: int
+  "Infill":
+    "Infill":
+      fill_density: double
+      fill_pattern:
+        type: select
+        options:
+          - ["rectilinear"]
+          - ["line"]
+          - ["concentric"]
+          - ["honeycomb"]
+          - ["hilbertcurve (slow)", "hilbertcurve"]
+          - ["archimedeanchords (slow)", "archimedeanchords"]
+          - ["octagramspiral (slow)", "octagramspiral"]
+      solid_fill_pattern:
+        title: Top/bottom fill pattern
+        type: select
+        options:
+          - ["rectilinear"]
+          - ["concentric"]
+          - ["hilbertcurve (slow)", "hilbertcurve"]
+          - ["archimedeanchords (slow)", "archimedeanchords"]
+          - ["octagramspiral (slow)", "octagramspiral"]
+    "Advanced":
+      infill_every_layers: {type: int, title: "Infill every", units: "layers"}
+      fill_angle: {type: double, units: "&deg;"}
+      solid_infill_below_area: {type: double, title: "Solid infill threashold area", units: "mm&sup2;"}
+      only_retract_when_crossing_perimeters: bool
+  "Speed":
+    "Speed for print moves":
+      perimeter_speed:          {type: double, title: "Permiters",          units: "mm/s"}
+      small_perimeter_speed:    {type: string, title: "Small perimeter",    units: "mm/s or %"}
+      external_perimeter_speed: {type: string, title: "External perimeter", units: "mm/s or %"}
+      infill_speed:             {type: double, title: "Infill",             units: "mm/s"}
+      solid_infill_speed:       {type: string, title: "Solid infill",       units: "mm/s or %"}
+      top_solid_infill_speed:   {type: string, title: "Top solid infill",   units: "mm/s or %"}
+      bridge_speed:             {type: double, title: "Bridges",            units: "mm/s"}
+    "Speed for non-print moves":
+      travel_speed:             {type: double, title: "Travel",             units: "mm/s"}
+    "Modifiers":
+      first_layer_speed:        {type: string, units: "mm/s or %"}
+  "Skirt and brim":
+    "Skirt":
+      skirts: {type: int, title: "Loops"}
+      skirt_distance: {type: double, title: "Distance from object", units: "mm"}
+      skirt_height: {type: int, title: "Skirt height", units: "layers"}
+    "Brim":
+      brim_width: {type: double, units: "mm"}
+  "Support material":
+    "Support material":
+      support_material: {type: bool, title: "Generate support material"}
+      support_material_threshold: {type: double, title: "Overhang threshold", units: "&deg;"}
+      support_material_pattern:
+        type: select
+        options:
+          - ["rectilinear"]
+          - ["honeycomb"]
+      support_material_spacing: {type: double, title: "Pattern spacing", units: "mm"}
+      support_material_angle: {type: double, title: "Pattern angle", units: "&deg;"}
+  "Notes":
+    "notes":
+      notes:  {type: text, title: "Notes"}
+  "Output options":
+    "Sequential printing":
+      complete_objects: {type: bool, title: "Complete individual objects"}
+    "Output file":
+      gcode_comments: {type: bool, title: "Verbose G-code"}
+      output_filename_format: {type: string, unsafe: true}
+    "Post-processing scripts":
+      post_process: { type: text, unsafe: true}
+  "Multiple Extruders":
+    "Extruders":
+      perimeter_extruder: int
+      infill_extruder: int
+      support_material_extruder: int
+  "Advanced":
+    "Extrusion width":
+      extrusion_width:                  {type: string, title: "Default extrusion width", units: "mm or % (leave 0 for auto)"}
+      first_layer_extrusion_width:      {type: string, title: "First layer",             units: "mm or % (leave 0 for auto)"}
+      perimeter_extrusion_width:        {type: string, title: "Perimeters",              units: "mm or % (leave 0 for auto)"}
+      infill_extrusion_width:           {type: string, title: "Infill",                  units: "mm or % (leave 0 for auto)"}
+      support_material_extrusion_width: {type: string, title: "Support material",        units: "mm or % (leave 0 for auto)"}
+    "Flow":
+      bridge_flow_ratio: double
+    "Other":
+      threads: {type: int, units: "(more speed but more memory usage)", unsafe: true}
+
+
+"Filament Settings":
+  "Filament":
+    "Filament":
+      filament_diameter: {type: double, title: "Diameter", type: "mm"}
+      extrusion_multiplier: double
+    "Temperature":
+      temperature: &temperature {type: double, type: "&deg; C"}
+      first_layer_temperature: *temperature
+      bed_temperature: *temperature
+      first_layer_bed_temperature: *temperature
+  "Cooling":
+    "Enable":
+      cooling: {type: bool, title: "Enable Cooling"}
+    "Fan settings":
+      min_fan_speed: &fan_speed {type: double, units: "%"}
+      max_fan_speed: *fan_speed
+      bridge_fan_speed: *fan_speed
+      disable_fan_first_layers: {type: int, units: "layers"}
+      fan_always_on: {type: bool, title: "Keep fan always on"}
+    "Cooling thresholds":
+      fan_below_layer_time: {type: double, title: "Enable fan if layer print time is below", units: "approximate seconds"}
+      slowdown_below_layer_time: {type: double, title: "Slow down if layer print time is below", units: "approximate seconds"}
+      min_print_speed:  {type: double, units: "mm/s"}
+
+
+"Printer Settings":
+  "General":
+    "Size and coordinates":
+      bed_size: {type: coordinate, units: "mm"}
+      print_center: {type: coordinate, units: "mm"}
+      z_offset: {type: double, units: "mm"}
+    "Firmware":
+      gcode_flavor:
+        type: "select"
+        title: "G-code flavor"
+        options:
+          - ["RepRap (Marlin/Sprinter)", "reprap"]
+          - ["Teacup", "teacup"]
+          - ["MakerBot", "makerbot"]
+          - ["Mach3/EMC", "mach3"]
+          - ["No extrusion", "no-extrusion"]
+      use_relative_e_distances: {type: bool, title: "Use relative E distances"}
+    "Capabilities":
+      extruders: {type: double, serialize: false}
+  "Custom G-code":
+    "Start G-code":
+      start_gcode: text
+    "End G-code":
+      end_gcode: text
+    "Layer change G-code":
+      layer_gcode: text
+  # TODO: Multi-extruder "Extruder #{n}":
+  "Extruder":
+    "Size":
+      nozzle_diameter: {type: double, units: "mm"}
+    "Position (for multi-extruder printers)":
+      extruder_offset: {type: coordinate, units: "mm", join_char: "x"}
+    "Retraction":
+      retract_length: {type: double, title: "Length", units: "mm (zero to disable)"}
+      retract_lift: {type: double, title: "Lift Z", units: "mm"}
+      retract_speed: {type: double, title: "Speed", units: "mm/s"}
+      retract_restart_extra: {type: double, title: "Extra length on restart", units: "mm"}
+      retract_before_travel: {type: double, title: "Minimum travel after retraction", units: "mm"}
+    "Retraction when tool is disabled (advanced settings for multi-extruder setups)":
+      retract_length_toolchange: {type: double, units: "mm (zero to disable)"}
+      retract_restart_extra_toolchange: {type: double, units: "mm"}
+
+
+# Hidden Values. Slic3r fails without these :(
+#acceleration: {type: bool, hidden: true}
+#rotate:  {type: int, hidden: true}
+#scale:  {type: double, hidden: true}
+#perimeter_acceleration:  {type: double, hidden: true}
+#infill_acceleration:  {type: double, hidden: true}
+#g0:  {type: bool, hidden: true}
+#gcode_arcs:  {type: bool, hidden: true}
+#first_layer_height:  {type: string, hidden: true}
+#extrusion_axis:  {type: string, hidden: true}
+#extruder_clearance_height:  {type: double, hidden: true}
+#extruder_clearance_radius:  {type: double, hidden: true}
+#duplicate:  {type: int, hidden: true}
+#duplicate_distance:  {type: double, hidden: true}
+#duplicate_grid:  {type: coordinate, hidden: true}

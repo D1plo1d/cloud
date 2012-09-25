@@ -1,0 +1,106 @@
+"Print Settings":
+  "Transform":
+    scale: double
+    rotate: {type: double, title: "Rotate (&deg;)"}
+    duplicate_x: {type: int, title: "Copies along X"}
+    duplicate_y: {type: int, title: "Copies along Y"}
+    duplicate_distance: {type: double, title: "Distance between copies"}
+  "Print settings":
+    perimeters: int
+    solid_layers: int
+    fill_density: double
+    fill_angle: {type: double, title: "Fill Angle (&deg;)"}
+    fill_pattern: &fill_pattern
+      type: select
+      options:
+        - [rectilinear]
+        - [line]
+        - [concentric]
+        - [hilbertcurve (slow), hilbertcurve]
+        - [archimedeanchords (slow), archimedeanchords]
+        - [octagramspiral (slow), octagramspiral]
+    solid_fill_pattern: *fill_pattern
+    support_material: {type: bool, title: "Generate support material"}
+    support_material_tool:
+      type: select
+      title: "Tool used to extrude support material"
+      options:
+        - [primary, 0]
+        - [secondary, 1]
+  "Accuracy":
+    layer_height: {type: double, title: "Layer height (mm)"}
+    first_layer_height_ratio: double
+    infill_every_layers: {type: int, title: "Infill every N layers"}
+  "Retraction":
+    retract_length: {type: double, title: "Length (mm)"}
+    retract_lift: {type: double, title: "Lift Z (mm)"}
+    retract_speed: {type: double, title: "Speed (mm/s)"}
+    retract_restart_extra: {type: double, title: "Extra length on restart (mm)"}
+    retract_before_travel: {type: double, title: "Minimum travel after retraction (mm)"}
+  "Skirt":
+    skirts: {type: int, title: "Loops"}
+    skirt_distance: {type: double, title: "Distance from object (mm)"}
+    skirt_height: {type: double, title: "Skirt height (layers)"}
+
+"Cooling":
+  "Cooling":
+    cooling: {type: bool, title: "Enable Cooling"}
+    max_fan_speed: {type: double, title: "Min fan speed (%)"}
+    min_fan_speed: {type: double, title: "Max fan speed (%)"}
+    bridge_fan_speed: {type: double, title: "Bridge fan speed (%)"}
+    fan_below_layer_time: {type: double, title: "Enable fan if layer print time is bellow (approximate seconds)"}
+    slowdown_below_layer_time: {type: double, title: "Slow down if layer print time is bellow (approximate seconds)"}
+    min_print_speed:  {type: double, title: "Min print speed (mm/s)"}
+    disable_fan_first_layers: {type: double, title: "Disabled fan for the first N layers"}
+    fan_always_on: {type: bool, title: "Keep fan always on"}
+
+"Printer and Filament":
+  "Printer":
+    nozzle_diameter: {type: double, title: "Nozzle diameter (mm)"}
+    print_center: {type: coordinate, title: "Print center (mm)"}
+    z_offset: double
+    gcode_flavor:
+      type: "select"
+      title: "G-code flavor"
+      options:
+        - [RepRap (Marlin/Sprinter), reprap]
+        - [Teacup]
+        - [MakerBot]
+        - [Mach3/EMC]
+        - [no extrusion]
+    use_relative_e_distances: {type: bool, title: "Use relative E distances"}
+
+  "Filament":
+    filament_diameter: {type: double, title: "Diameter (mm)", important: true}
+    extrusion_multiplier: double
+    temperature: {type: double, title: "Temperature (&deg; C)", important: true}
+    first_layer_temperature: {type: double, title: "First layer temperature (&deg; C)"}
+    bed_temperature: {type: double, title: "Bed temperature (&deg; C)"}
+    first_layer_bed_temperature: {type: double, title: "First layer bed temperature (&deg; C)"}
+  "Print speed":
+    perimeter_speed: {type: double, title: "Permiters (mm/s)"}
+    small_perimeter_speed: {type: double, title: "Small Perimeters (mm/s)"}
+    infill_speed: {type: double, title: "Infill (mm/s)"}
+    solid_infill_speed: {type: double, title: "Solid infill (mm/s)"}
+    bridge_speed: {type: double, title: "Bridges (mm/s)"}
+  "Other speed settings":
+    travel_speed: {type: double, title: "Travel (mm/s)"}
+    bottom_layer_speed_ratio: double
+
+"Start/End GCODE":
+  "Start/End GCODE":
+    start_gcode: {type: text, title: "Start GCODE"}
+    end_gcode: {type: text, title: "End GCODE"}
+    gcode_comments: {type: bool, title: "Verbose G-Code"}
+    post_process: { type: text, title: "Post-processing scripts", unsafe: true}
+
+"Notes":
+  "Notes":
+    notes:  {type: text, title: "Configuration notes"}
+
+"Advanced":
+  "Extrusion":
+    extrusion_width_ratio: {type: double, title: "Extrusion width (ratio over layer height; leave zero to calculate automatically)"}
+    bridge_flow_ratio: double
+  "Output":
+    output_filename_format: {type: string, title: "Output filename format", unsafe: true}

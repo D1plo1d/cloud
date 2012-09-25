@@ -1,0 +1,31 @@
+%tr.user-role
+  %td
+    = user.username
+  %td
+    - if role.name == 'owner' or cannot?(:manage_users, role.resource)
+      .pull-right.role-label= role.name.capitalize
+
+    - else
+      .btn-group.pull-right.btn-left-margin
+        %a.btn.dropdown-toggle{:"data-toggle"=>"dropdown"}
+          = role.name.capitalize
+          %span.caret
+
+        - # Drop down box to change the members permissions
+        %ul.dropdown-menu
+          - ['admin', 'member'].each do |role_option|
+            %li
+              - has_role = (role_option == role.name)
+              - url = has_role ? "#" : add_role_user_print_queue_path(@user, @print_queue, :"role[user]" => user, :"role[name]" => role_option)
+              = link_to url, ( has_role ? {} : {:remote => true} ) do
+                - if has_role
+                  .icon-check.icon-green
+                - else
+                  .icon-check-empty
+                = role_option.capitalize
+
+          %li.divider
+          %li
+            = link_to delete_role_user_print_queue_path(@user, @print_queue, :"role[user]" => user), {:remote => true} do
+              .icon-remove.icon-red
+              Revoke Access

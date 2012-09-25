@@ -1,0 +1,76 @@
+.row
+  .span12
+    %h2.print-queue-breadcrumbs-js{:"data-base-url" => url_for([@user, @print_queue])}
+      = breadcrumbs @print_queue, :page_link => false
+
+
+- if @print_queue.g_code_profiles.blank? # TODO: or the print client is not connected
+  .row.welcome-to-your-new-printer
+    .span12
+      %h3 Welcome to your new printer. There are two steps left to configure your printer:
+      %ol
+        - if false
+          %li
+            %a{:href => "#print_client_settings_modal", :"data-toggle" => "modal"} Download and install a print client
+        %li
+          %a{:href => "#create_g_code_profile_modal", :"data-toggle" => "modal"} Add a Slic3r Configuration for your printer
+
+
+- else
+  .row
+    .span12
+      %ul.nav.nav-tabs
+
+        - if can?(:manage_printers, @print_queue)
+          %a.pull-right.btn-open-print-client-js{:href => "#print_client_settings_modal", :"data-toggle" => "modal"}
+            Print Client Settings
+
+        - @tabs.each do |tab_id, title|
+          %li{:class => (tab_id == @active_tab ? "active" : "")}
+            %a{:href => "##{tab_id}", :"data-toggle" => "tab"}= title
+
+      .tab-content.tab-content-pages
+        - @tabs.each do |tab_id, title|
+          .tab-pane{:id => tab_id, :class => (tab_id == @active_tab ? "active" : "")}
+            = render :partial => "print_queues/tabs/#{tab_id}_tab"
+
+
+- if can?(:manage_printers, @print_queue)
+  .modal.hide#print_client_settings_modal
+    .modal-header
+      %h3 Setting up the Print Queue Client
+    .modal-body
+      %h3 Step 1: Download and Install the Print Queue Client
+      .download-container
+        %a.btn.btn-download{:href=>"https://github.com/Dreamforge/PrintClient", :target => "__blank__"} Download Print Queue Client
+
+      %h3 Step 2: Add the Ultimaker's Print Queue Token
+      .token= @print_queue.printers.last.id
+
+
+.modal.hide#create_g_code_profile_modal
+  .modal-header
+    %h3
+      %i.icon-plus
+      New GCode Profile
+  = simple_form_for [@user, @print_queue, GCodeProfile.new], :html => { :class => "form-horizontal" } do |f|
+    .modal-body
+      = f.input :name
+      - if false # TODO: allow users to upload their own slic3r profiles
+        .control-group
+          .control-label
+            Slicing
+          .controls
+            %p
+              = radio_button_tag "add_gcode_profile_slicing_radio", false, true
+              Default Slic3r settings
+              %b (Basic)
+            %p
+              = radio_button_tag "add_gcode_profile_slicing_radio", true
+              Upload your Slic3r settings
+              %b (Advanced)
+            .btn.btn-primary.btn-file.btn-upload-config.pull-left.hide
+              Select a Slic3r configuration
+              = f.file_field :config_file_uploader
+      .modal-footer
+        = f.submit "Create Profile", :class => "btn btn-primary"

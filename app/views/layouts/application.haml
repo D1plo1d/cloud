@@ -1,0 +1,33 @@
+!!! 5
+%html
+  %head
+    %title CloudSlicing
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    .header
+      .container
+        .row
+          .span12
+            .session-links.pull-right
+              - if user_signed_in?
+                = link_to(current_user, current_user)
+                = link_to("Admin Panel", "/admin/") if current_user.has_role? :admin
+                = link_to("Logout", destroy_user_session_path, :method => :delete)
+              - else
+                = link_to("Login", new_user_session_path)
+                = link_to("Sign Up", new_user_registration_path)
+            %h1= link_to("Cloud Slicing", "/")
+    - if defined? @container and @container == false
+      = yield
+    - else
+      .container
+        - if flash[:notice].present?
+          %p.rails-flash-notice
+            = flash[:notice]
+        - if flash[:error].present?
+          %p.rails-flash-error
+            Error: 
+            = flash[:error]
+        = yield

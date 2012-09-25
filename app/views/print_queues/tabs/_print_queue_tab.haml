@@ -1,0 +1,25 @@
+= subscribe_to @print_queue.pub_sub_channel
+
+%table.table.table-striped.table-no-sort.table-print-queue-js{:"data-can-manage" => can?(:manage_print_jobs, @print_queue).to_s}
+  %thead
+    %tr
+      %th
+      %th Print Order
+      %th File
+      %th Status
+      %th Copies
+      %th Slic3r Profile
+      %th
+  %tbody
+
+%hr
+
+- if can? :manage_print_jobs, @print_queue
+  = simple_form_for [@user, @print_queue, @print_queue.print_jobs.build], :format => :json, :remote => true do |f|
+    .btn.btn-primary.pull-right.btn-file.btn-add-job-js
+      %i.icon-plus
+      Add a Print Job
+      = f.simple_fields_for :cad_file do |cad_file_form|
+        = cad_file_form.file_field :file, :multiple => true
+
+.modal.hide#view_print_job_modal

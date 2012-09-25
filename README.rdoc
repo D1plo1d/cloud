@@ -1,0 +1,15 @@
+== Env variables
+
+To keep the production passwords from being disclosed on github the server requires a number of environment variables to be set. Eventually the dev environment set up should be automatic but for now the following variables need to be set:
+
+* S3_BUCKET_NAME
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* SECRET_TOKEN
+* PRIVATE_PUB_SECRET_TOKEN
+* PRIVATE_PUB_URL (production only)
+
+
+== License
+
+Licensed under the GNU GENERAL PUBLIC LICENSE Version 3.

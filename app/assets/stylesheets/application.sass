@@ -1,0 +1,106 @@
+//= require_tree ../../../vendor/assets/
+//= require jquery.ui.autocomplete
+@import "shared/colors"
+
+@import "shared/scaffolding"
+@import "bootstrap"
+@import "font-awesome"
+
+@import "shared/*"
+
+@import "./*/*"
+
+// Layout-specific styling
+
+.session-links
+  a
+    margin-left: 10px
+
+//.btn-left-margin, .btn-both-margins
+//  margin-left: 20px
+
+//.btn-right-margin, .btn-both-margins
+//  margin-right: 20px
+
+.header
+  background: $grayLighter
+
+  .session-links
+    margin-top: 10px
+
+  h1
+    a
+      color: $grayLight
+      &:hover
+        color: $gray
+        text-decoration: none
+
+.tab-content-pages
+  overflow: visible
+
+.editable-attr-edit
+  display: none
+
+
+// Delete Buttons
+.btn-remove-icon
+  color: $btnDangerBackground
+
+  &.gray-icon
+    color: $grayLighter
+
+  &:hover
+    text-decoration: none
+    color: $btnDangerBackgroundHighlight
+
+
+// Editable Attributes
+.editable-attr
+  a, h2
+    float: left
+
+  .btn
+    display: none
+  &:hover .btn
+    display: block
+    float: left
+    margin-top: -5px
+    margin-left: 5px
+
+h2.editable-attr
+  margin-top: 0px
+
+  div:first-child
+    margin-top: -6px
+
+  &:hover .btn
+    margin-top: 0px
+
+.editable-attr-edit.h2
+  margin-top: -18px
+
+  .btn
+    margin-left: 5px
+
+.icon-green
+  color: $green
+
+.icon-red
+  color: $btnDangerBackground
+
+.form-horizontal .control-group .controls .input-placeholder
+  padding-top: 5px
+
+.header
+  margin-bottom: 20px
+
+.rails-flash-error, .rails-flash-notice
+  font-size: 160%
+  margin-bottom: 10px
+
+.rails-flash-notice
+  color: $btnSuccessBackgroundHighlight
+
+.rails-flash-error
+  color: $btnDangerBackgroundHighlight
+

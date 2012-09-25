@@ -1,0 +1,25 @@
+- @active_profile = @print_queue.g_code_profiles.first
+.container
+  .row
+    .span4.profiles_list
+      %ul.nav.nav-list
+        %li.nav-header Profiles
+        - @print_queue.g_code_profiles.each do |profile|
+          %li{:class => (profile == @active_profile ? "active" : "")}
+            - if can?(:manage_profiles, @print_queue)
+              .pull-right
+                =link_to [@user, @print_queue, profile], :method => "delete", :confirm => "Are you sure you want to delete #{profile}?" do
+                  %i.icon-remove.btn-remove-icon.gray-icon
+            %a.profile-link-js{:href => "#profile-#{profile.id}", :"data-toggle" => "tab", :"data-profile-id" => profile.id}
+              = profile.name
+
+        - if can?(:manage_profiles, @print_queue)
+          %li.divider
+          %li.add-profile
+            %a{:href => "#create_g_code_profile_modal", :"data-toggle" => "modal"}
+              %i.icon-plus
+              New Profile
+
+    .span8
+      .tab-content.profile-tab-content
+        = render @print_queue.g_code_profiles

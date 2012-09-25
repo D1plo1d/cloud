@@ -1,0 +1,101 @@
+.tab-pane{:id => "profile-#{g_code_profile.id}", :"data-profile-id" => g_code_profile.id, :class => (g_code_profile == @active_profile ? "active" : "")}
+
+  - show_config = true
+  - can_edit = can?(:edit, g_code_profile)
+
+  - # Basic / Advanced Toggles
+  - if show_config
+    .config-mode.pull-right
+      .btn-group{:"data-toggle"=>"buttons-radio"}
+        %a.btn.active{:href => "#profile-#{g_code_profile.glob}-basic", :"data-toggle" => "tab"} Basic
+        %a.btn{:href => "#profile-#{g_code_profile.glob}-advanced", :"data-toggle" => "tab"} Advanced
+
+  - # Profile Name
+  %h2.editable-attr.profile-name-js
+    .pull-left= g_code_profile.name
+    - if can_edit
+      .btn.btn-primary.pull-left.btn-edit Edit
+    .clear
+  .editable-attr-edit.h2
+    = form_for [g_code_profile.print_queue.owner, g_code_profile.print_queue, g_code_profile], :remote => true, :validate => true, :format => :json, :html => {:class => "form form-inline"} do |f|
+      = f.text_field :name, :label => false, :class =>"pull-left"
+      = f.submit "Save", :class => "btn btn-primary pull-left"
+    .clear
+
+  - if false # URL
+    .editable-attr.g-code-profile-url
+      = link_to g_code_profile.url
+      - if can_edit
+        .btn.btn-primary.btn-edit Edit
+      .clear
+    .editable-attr-edit.g-code-profile-url-edit
+      = simple_form_for [g_code_profile.print_queue.owner, g_code_profile.print_queue, g_code_profile], :remote => true, :validate => true, :format => :json, :html => {:class => "form form-inline"} do |f|
+        = f.submit "Save", :class => "btn btn-primary pull-right"
+        = f.input :url, :label => false
+      .clear
+
+  - if show_config
+    .tab-content.advanced-basic-tabs
+
+
+      - # Basic Slic3r Configs
+      - #--------------------------------------------------------------------------------------
+      .tab-pane.basic-slic3r-settings-tab.active{:id => "profile-#{g_code_profile.glob}-basic"}
+        = simple_form_for [@user, @print_queue, g_code_profile], :format => "json", :remote => true, :validate => true, :as => :"g_code_profile_basic_#{g_code_profile.id}" do |f|
+          .form.form-horizontal
+            %h3 Basic Settings
+            .well
+              - GCodeProfile.slic3r.commonly_used_fields.each do |attr_name, attr_meta_data|
+                - value = g_code_profile.config[attr_name]
+                - locals = { :name => attr_name, :meta => attr_meta_data, :value => value, :f => f, :can_edit => can_edit, :g_code_profile => g_code_profile }
+                = render :partial => "/g_code_profiles/config_row", :locals => locals
+
+          = link_to download_user_print_queue_g_code_profile_path( @user, @print_queue, g_code_profile ), :class => "pull-left btn" do
+            %i.icon-download
+            Download
+          - if can_edit
+            .g-code-profile-action-btns
+              .btn-basic-profile-save.btn.btn-primary.pull-right Save Profile Changes
+              %input.btn.pull-right{:type => "reset", :value => "Reset"}
+              .saving-status.hide
+                %i.icon-ok
+                Saved
+
+      - # Advanced Slic3r Configs
+      - #--------------------------------------------------------------------------------------
+      .tab-pane{:id => "profile-#{g_code_profile.glob}-advanced"}
+        = simple_form_for [@user, @print_queue, g_code_profile], :format => "json", :remote => true, :validate => true, :as => :"g_code_profile_#{g_code_profile.id}" do |f|
+          - first = true
+          %ul.nav.nav-tabs
+            - GCodeProfile.slic3r.ui_layout.each do |category, category_contents|
+              %li{:class => (first == true ? "active" : "")}
+                %a{:href=>"##{category.downcase.gsub(/[ _\/]/, "-")}-#{g_code_profile.glob}", :"data-toggle"=>"tab"}= category
+              - first = false
+
+          - first = true
+          .tab-content.form.form-horizontal.advanced-slic3r-settings-tabs
+            - GCodeProfile.slic3r.safe_ui_layout.each do |category, category_contents|
+              .tab-pane{:id => "#{category.downcase.gsub(/[ _\/]/, "-")}-#{g_code_profile.glob}", :class => (first == true ? "active" : "")}
+                - category_contents.each do |mid_category, mid_category_contents|
+                  %h3= mid_category
+                  - mid_category_contents.each do |sub_category, sub_category_contents|
+                    .span8
+                      %h4= sub_category
+                      .well
+                        - #raise sub_category_contents.class.to_s if sub_category_contents.class.to_s != "Hash"
+                        - sub_category_contents.each do |attr_name, attr_meta_data|
+                          - value = g_code_profile.config[attr_name]
+                          - locals = { :name => attr_name, :meta => attr_meta_data, :value => value, :f => f, :can_edit => can_edit, :g_code_profile => g_code_profile }
+                          = render :partial => "/g_code_profiles/config_row", :locals => locals
+                  - first = false
+
+          = link_to [@user, @print_queue, g_code_profile], :class => "pull-left btn" do
+            %i.icon-download
+            Download
+          - if can_edit
+            .g-code-profile-action-btns
+              = f.submit "Save Profile Changes", :class => "btn btn-primary pull-right btn-advanced-profile-save"
+              %input.btn.pull-right{:type => "reset", :value => "Reset"}
+              .saving-status.hide
+                %i.icon-ok
+                Saved

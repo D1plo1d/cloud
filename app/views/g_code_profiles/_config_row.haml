@@ -1,0 +1,43 @@
+- if can_edit
+  - form_opts = case(type = meta[:type])
+    - when 'double', 'int'
+      - as = {"int" => :integer, "double" => :decimal}[type]
+      - {:input_html => {"data-validation-type" => type}, :as => as }#, :step => ( type == "int" ? 1 : 0.1 ) }}
+    - when 'select'
+      - value_method = Proc.new {|o| o[1].present? ? o[1] : o[0]}
+      - { :collection => meta[:options], :value_method => value_method, :label_method => Proc.new {|o| o[0]} }
+    - when 'bool'
+      - { :as => :boolean }
+    - when 'text'
+      - { :as => :text }
+    - when 'coordinate'
+      - html_opts = {:type => "number", :step => 1, "data-validation-type" => :integer}
+      - { :as => :coordinates, :field_names_method =>  Proc.new {|i| :"#{name}_#{i}_config_row"}, :input_html => html_opts}
+    - else
+      - {}
+
+  - hint = "<span class='units'>#{meta[:units]}</span>".html_safe
+  - form_opts = {:label => meta[:title], :error => true, :hint => hint, :wrapper => :inline_hint, :input_html => {} }.merge form_opts
+
+  = f.input :"#{name}_config_row", form_opts
+
+- else
+  .control-group
+    - html = case(type = meta[:type])
+      - when 'text'
+        - raw(value).gsub("\n", "<br/>").html_safe
+      - when 'coordinate'
+        - [0,1].map{|i| g_code_profile.send :"#{name}_#{i}_config_row"}.join(" x ")
+      - when 'bool'
+        - f.input :"#{name}_config_row", :as => :boolean, :label => false, :disabled => true
+      - when 'select'
+        - (meta[:options].select{|o| o[1] == value}.first || meta[:options][0])[0]
+      - when 'double', 'int'
+        - value
+      - else
+        - value
+    %label.control-label= meta[:title]
+    .controls
+      .input-append
+        .input-placeholder= html
+    

@@ -1,0 +1,21 @@
+.row.user-profile-page
+  .span6
+    = image_tag @user.gravatar_url(64), :class => "pull-left gravatar-large"
+    %h2= @user
+
+  .span6.print-queues-list
+    .well
+      %h3 #{@user == current_user ? "My" : "#{@user.username.capitalize}'s"} 3D Printers
+      - if @user.print_queues.present?
+        = render :partial => @user.print_queues
+      - else
+        .no-print-queues
+          - if @user == current_user
+            %p You don't seem to have any printer added yet.
+            %p To add one, just fill in a name for your printer and we'll get started.
+          - else
+            %p #{@user} hasn't added any printers yet :(
+      - if @user == current_user
+        = form_for [@user, ( @print_queue || PrintQueue.new )], :html => {:class => "form form-horizontal form-add-print-queue"} do |f|
+          = f.text_field :name, :placeholder => "Printer Name"
+          = f.submit "Add Printer", :class => "btn btn-primary"

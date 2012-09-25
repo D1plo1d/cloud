@@ -1,0 +1,30 @@
+- print_queue = print_job.print_queue
+- user = print_queue.owner
+
+- if print_job_format == :row
+  %tr{:"data-job-id" => print_job.id}
+
+    %td= #row index gets injected here by js
+
+    %td= link_to print_job.name, "#"
+
+    %td= print_job.status_html
+
+    %td
+      = print_job.copies_total
+      // This is the print copies input, sorry for the spagetti (nom nom nom)
+      //= simple_form_for [user, print_queue, print_job], :remote => true, :format => :json do |f|
+      //  - f.input :copies_total, :label => false, :input_html => { :onblur=>"$(this).trigger(\"submit.rails\")" }
+
+    %td
+      - if defined? forms
+        // This is the profile drop down, sorry for the spagetti (nom nom nom)
+        = simple_form_for [user, print_queue, print_job], :remote => true, :format => :json do |f|
+          - f.association :g_code_profile, :label => false, :collection => print_queue.g_code_profiles, :selected => print_job.g_code_profile.id, :input_html => { :onchange=>"$(this).trigger(\"submit.rails\")" }
+      - else
+        = print_job.g_code_profile
+
+    %td.drag-handle-td
+      %i.icon-reorder.drag-handle
+- else
+  = index
